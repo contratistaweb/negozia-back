@@ -4,8 +4,9 @@ import { config } from 'dotenv';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './modules/configuration/configuration';
 import { MongooseModule } from '@nestjs/mongoose';
-import * as mongoose_delete from 'mongoose-delete';
 import Configuration from './modules/configuration/configuration';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { EventMailModule } from './modules/event-mail/event-mail.module';
 
 config();
 
@@ -21,14 +22,17 @@ config();
         return {
           uri: Configuration().mongoUri,
           connectionFactory: (connection) => {
-            connection.plugin(mongoose_delete, {
+            const pluginOptions = {
               overrideMethods: 'all',
-            });
+            };
+            connection.plugin(require('mongoose-delete'), pluginOptions);
             return connection;
           },
         };
       },
     }),
+    EventEmitterModule.forRoot(),
+    EventMailModule,
     PostsModule,
   ],
   controllers: [],

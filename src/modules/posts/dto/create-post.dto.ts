@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsString } from 'class-validator';
+import { Image } from '../interfaces/image.interface';
 
 export class CreatePostDto {
   @ApiProperty()
@@ -15,6 +16,10 @@ export class CreatePostDto {
   type: string;
 
   @ApiProperty()
+  @IsString()
+  tags: string;
+
+  @ApiProperty()
   @IsArray()
-  tags: string[];
+  images: Image[];
 }
